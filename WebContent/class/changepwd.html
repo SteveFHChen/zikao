@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>修改密码</title>
+<link rel="stylesheet" type="text/css" href="../common/zikao.css"/>
+<style type="text/css">
+button.cls-normal-button {
+	width: 140px;
+	margin: 0px 17px;
+}
+
+img.cls-user-photo {
+    margin: auto;
+    width: 130px;
+    height: 130px;
+    text-align: center;
+    display: block;
+}
+
+#userName {
+    margin: auto;
+    display: block;
+    width: fit-content;
+    font-size: 20px;
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+<div id="mainBox">
+	<div id="pageTitle"><h2 class="cls-title">修改密码</h2></div>
+	<div id="formBox">
+		<div class="cls-form-row">
+			<img class="cls-user-photo" src="/zikao/resource/class/default.jpg"/>
+			<span id="userName">Steve Chen</span>
+		</div>
+		<div class="cls-form-row">
+			<div class="cls-form-key"><strong>原密码：</strong></div>
+			<div class="cls-form-value"><input type="password" id="txtOldPwd"/><span class="cls-form-star">*</span></div>
+		</div>
+		<div class="cls-form-row">
+			<div class="cls-form-key"><strong>新密码：</strong></div>
+			<div class="cls-form-value"><input type="password" id="txtNewPwd1"/><span class="cls-form-star">*</span></div>
+		</div>
+		<div class="cls-form-row">
+			<div class="cls-form-key"><strong>确认新密码：</strong></div>
+			<div class="cls-form-value"><input type="password" id="txtNewPwd2"/><span class="cls-form-star">*</span></div>
+		</div>
+		<div class="cls-form-row">
+			<button class="cls-normal-button" id="btnOk">修改</button>
+			<button class="cls-normal-button" id="btnCancel">返回</button>
+		</div>
+		<div class="cls-form-row">
+			<div class="cls-warm-msg" id="warmInvalid" style="color:#f00; display:none;">密码设置不符合要求，请重新设置！</div>
+			<div class="cls-warm-msg" id="warmBlank" style="color:#f00; display:none;">必填项不能为空！</div>
+			<div class="cls-warm-msg" id="warmDifferent" style="color:#f00; display:none;">新密码与确认新密码不一致，请重新设置！</div>
+		</div>
+	</div>
+</div>
+	<!-- 原密码：<input type="password" id="txtOldPwd"/><br/>
+	新密码：<input type="password" id="txtNewPwd1"/><br/>
+	确认新密码：<input type="password" id="txtNewPwd2"/><br/>
+	<input type="submit" id="btnOk" value="修改"/>
+	<div id="warm" style="color:#f00; display:none;">密码设置不符合要求，请重新设置！</div> -->
+</body>
+<script type="text/javascript" src="../common/jslib/jquery-3.4.1.js"></script>
+<script type="text/javascript" src="../common/constant.js"></script>
+<script type="text/javascript">
+(function(w){
+	
+	document.getElementById("btnOk").addEventListener("click", submit);
+	document.getElementById("btnCancel").addEventListener("click", cancel);
+	
+	function init(){
+		queryUserInfo();
+	}
+	init();
+	
+	function queryUserInfo(){
+		let requestData = {};
+		requestData.oper = "queryCurrentUserInfo";
+		
+		$.ajax({
+			url: "/zikao/manageuser",
+			data: JSON.stringify(requestData),
+			type: "POST",
+			dataType: "json",
+			contentType: "application/json",
+			success: function(data){
+				console.log("receive response.");
+				console.log(data);
+//				alert(JSON.stringify(data));
+				if(data.header.status==200){
+					let photos = document.querySelectorAll(".cls-user-photo");
+					for(let i=0; i<photos.length; i++){
+						let photo = photos[i];
+						photo.setAttribute("src", PHOTO_ROOT_PATH+(data.data.photoPath==null ? "default.jpg" : data.data.photoPath));
+					}
+					
+					document.getElementById("userName").innerHTML=data.data.name;
+					
+				}else{
+					alert(data.header.message);
+				}
+				
+			},
+			error: function(e){
+				console.log(e);
+			}
+		});
+	}
+	
+	
+	function cancel(){
+		w.location.href="hi.html";
+	}
+	
+	function submit(){
+		document.getElementById("warmInvalid").style.setProperty("display", "none");
+		document.getElementById("warmBlank").style.setProperty("display", "none");
+		document.getElementById("warmDifferent").style.setProperty("display", "none");
+		
+		let requestData = {
+				oper: "changePwd",
+				pwd:document.getElementById("txtOldPwd").value,
+				newPwd1:document.getElementById("txtNewPwd1").value,
+				newPwd2:document.getElementById("txtNewPwd2").value
+		};
+		
+		//Checking
+		if(requestData.pwd=="" || requestData.newPwd1=="" || requestData.newPwd1==""){
+			document.getElementById("warmBlank").style.setProperty("display", "inline");
+			return;
+		}else if(requestData.newPwd1!=requestData.newPwd2){
+			document.getElementById("warmDifferent").style.setProperty("display", "inline");
+			return;
+		}
+		
+		$.ajax({
+			url: "/zikao/manageuser",
+			data: JSON.stringify(requestData),
+			type: "POST",
+			dataType: "json",
+			contentType: "application/json",
+			success: function(data){
+				console.log("receive response.");
+				console.log(data);
+				//alert(JSON.stringify(data));
+				if(data.header.status==200){
+					alert(data.header.message);
+				}else{
+					document.getElementById("warmInvalid").style.setProperty("display", "inline");
+				}
+			},
+			error: function(e){
+				console.log(e);
+			}
+		});
+		
+		/* $.ajax({
+			url: "/zikao/manageuser",
+			data: JSON.stringify({oper: "queryUserInfo"}),
+			type: "POST",
+			dataType: "json",
+			contentType: "application/json",
+			success: function(data){
+				console.log("receive response.");
+				console.log(data);
+				alert(JSON.stringify(data));
+			},
+			error: function(e){
+				console.log(e);
+			}
+		}); */
+	}
+	
+})(window);
+</script>
+</html>

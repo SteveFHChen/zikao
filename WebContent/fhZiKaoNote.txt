@@ -1,0 +1,35 @@
+Maven命令创建Web项目：
+	mvn archetype:generate -DgroupId=com.fh -DartifactId=prj-zikao -DarchetypeArtifactId=maven-archetype-webapp
+
+导出Maven项目依赖的Jar：
+	mvn dependency:copy-dependencies -DoutputDirectory=lib
+	maven项目所依赖的jar包都会复制到项目目录下的lib目录下
+
+Web项目，前后端参数传输问题
+
+	Ajax请求，传参是JSON对象还是JSON字符串
+	原因：HTTP协议是明文传输，JSON对象不能被序列化，所以会被转成字符串键值对传输
+	contentType取值:
+		application/x-www-form-urlencoded (默认) -> 把Form表单、JSON对象等都切成key-value用&连接来传
+		text/plain;charset=UTF-8
+		application/json -> 直接把json string放到body里传，没有key
+		application/xml -> 直接把xml string放到body里传，没有key
+		
+		springMVC接收JSON参数详解
+		https://blog.csdn.net/bingguang1993/article/details/95491259
+
+	后台接收Payload中的Json String
+		使用inputstream方式读取。
+		
+		AJAX POST请求中参数以form data和request payload形式在servlet中的获取方式
+		https://blog.csdn.net/mhmyqn/article/details/25561535
+
+	Json String转化为Java Object
+	使用现成的Jackson库非常方便。
+		升级到SPRING 4后，注意JACKSON的包变了！
+		https://www.iteye.com/blog/jackyrong-2345489
+
+SpringMVC开放静态资源
+	<mvc:resources location="/common/" mapping="/common/**"/>
+	
+	

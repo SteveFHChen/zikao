@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>课时预约</title>
+<link rel="stylesheet" type="text/css" href="../common/zikao.css"/>
+<style>
+div#mainBox>div {
+	margin: 0px 0px 17px 0px;
+}
+
+li {
+	/* list-style: none; */
+	/* display: inline-block; */
+	border: 1px solid #ececec;
+	/* margin: 0px; */
+	/* padding: 0px; */
+	width: 134px;
+	float: left;
+	text-align: center;
+}
+
+ul {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+div#timeBox {
+	overflow: scroll;
+}
+
+div#timeDetail {
+	overflow: hidden;
+	width: 981px;
+}
+
+div.cls-time-box ul div {
+	width: 80%;
+	height: 60px;
+	/* margin: auto; */
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 5px;
+	padding: 5px;
+	/* margin-left: auto; */
+	/* margin-right: auto; */
+	/* margin-top: 5px; */
+	/* margin-bottom: 5px; */
+	margin: 5px;
+	/* 
+    background-color: #fff9e5;
+    border: 1px solid #ffc600; 
+    */
+}
+
+div.cls-time-box ul div a {
+	color: #fff;
+}
+
+div.cls-time-box ul:first-child li {
+	background-color: rgb(219, 0, 17);
+	color: #fff;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+select {
+	min-width: 200px;
+	min-height: 30px;
+}
+
+#buttonGroup {
+	margin: auto;
+	width: 500px;
+}
+
+.cls-time-enabled {
+	border-color: #ffc600;
+	background-color: #fff;
+	cursor: pointer;
+}
+
+.cls-time-enabled:hover {
+	border-color: #ffc600;
+	background-color: #ffc600;
+	cursor: pointer;
+}
+
+.cls-time-myselected {
+	border-color: #ffc600;
+	background-color: rgb(0, 150, 17);
+	cursor: pointer;
+	color: #fff;
+}
+
+.cls-time-mypassedselected {
+	border-color: #ffc600;
+	background-color: rgb(0, 100, 17);
+	color: #fff;
+}
+
+.cls-time-mynewselect {
+	border-color: #ffc600;
+	background-color: rgb(219, 0, 17);
+	cursor: pointer;
+	color: #fff;
+}
+
+.cls-time-otheroccupied {
+	border-color: #c6c6c6;
+	background-color: #0050ff; /* #e2e2e2; */
+	color: #fff;
+}
+
+.cls-time-teacherclosed {
+	border-color: #c6c6c6;
+	background-color: #a2a2a2;
+	color: #fff;
+}
+
+div#teacherBox {
+	padding: 0px 20px;
+}
+
+a.cls-head-link {
+	float: right;
+	padding: 0px 10px;
+	margin-top: 10px;
+}
+
+a.cls-head-photo-link {
+	float: right;
+}
+
+img.cls-user-photo {
+	width: 40px;
+	height: 40px;
+	float: right;
+}
+
+div#timeHeaderBox {
+	border: 1px solid #0f0;
+	width: 800px;
+	overflow: hidden;
+}
+
+div#timeHeaderPanel {
+	width: 981px;
+}
+
+.cls-tuli {
+    width: 30px;
+    height: 30px;
+    background: #00f;
+    display: inline-block;
+    float: left;
+    margin-right: 5px;
+}
+
+#tuli ul>li {
+    width: 100px;
+}
+
+#tuliBox ul>li {
+    width: 350px;
+    padding: 0px 30px;
+}
+
+#tuliBox ul span {
+    float: left;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+div#tuliBox {overflow: auto;}
+</style>
+</head>
+<body>
+<div id="mainBox" style="width:800px;">
+	<div id="pageTitle"><h2 class="cls-title">课时预约</h2></div>
+	<div id="teacherBox">
+		<strong>课 程：</strong>
+		<select id="courseSelector">
+			<!-- <option value="0" selected="selected"></option>
+			<option value="primaryenglish">小学英语</option>
+			<option value="internetdb">互联网数据库</option>
+			<option value="or">运筹学基础</option>
+			<option value="close">关闭</option> -->
+		</select>
+		<a class="cls-head-link" style="display:none;" href="login.html" id="loginLink"><strong> 系 统 登 入 </strong></a>
+		<a class="cls-head-link" style="display:none;" href="javascript:void(0);" onclick="logout()" id="logoutLink"><strong> 注 销 </strong></a>
+		<a class="cls-head-link" style="display:none;" href="javascript:void(0);" onclick="window.location.href='changepwd.html'" id="userNameLink"><strong id="userName">Steve Chen</strong></a>
+		<a class="cls-head-photo-link" style="display:none;" href="changepwd.html" id="userPhotoLink"><img class="cls-user-photo" src="/zikao/resource/class/default.jpg"/></a>
+		<div id="courseAlert" style="color:#f00; display:none;">请选择课程！</div>
+		<input type="text" id="txtUserId" style="display:none;"/>
+	</div>
+	<!-- <div id="timeHeaderBox"  class="cls-time-box">
+		<div id="timeHeaderPanel">
+		<ul>
+			<li>星期一<br/><span>2月3日</span></li>
+			<li>星期二<br/><span>2月4日</span></li>
+			<li>星期三<br/><span>2月5日</span></li>
+			<li>星期四<br/><span>2月6日</span></li>
+			<li>星期五<br/><span>2月7日</span></li>
+			<li>星期六<br/><span>2月8日</span></li>
+			<li>星期日<br/><span>2月9日</span></li>
+		</ul>
+		</div>
+	</div> -->
+	<div id="timeBox" class="cls-time-box">
+		<div id="timeDetail">
+		<ul>
+			<li>星期一<br/><span>2月3日</span></li>
+			<li>星期二<br/><span>2月4日</span></li>
+			<li>星期三<br/><span>2月5日</span></li>
+			<li>星期四<br/><span>2月6日</span></li>
+			<li>星期五<br/><span>2月7日</span></li>
+			<li>星期六<br/><span>2月8日</span></li>
+			<li>星期日<br/><span>2月9日</span></li>
+			<!-- <li>星期一<br/><span>2月10日</span></li>
+			<li>星期二<br/><span>2月11日</span></li>
+			<li>星期三<br/><span>2月12日</span></li>
+			<li>星期四<br/><span>2月13日</span></li>
+			<li>星期五<br/><span>2月14日</span></li> -->
+		</ul>
+		<ul>
+			<li><div id="2020020310001025" class="cls-time-myselected" course="or">10:00-10:25<br/>运筹学</div></li>
+			<li><div id="2020020410001025" class="cls-time-otheroccupied" course="internetdb">10:00-10:25<br/>互联网DB</div></li>
+			<li><div id="2020020510001025" class="cls-time-teacherclosed">关闭</div></li>
+			<li><div id="2020020610001025" class="cls-time-teacherclosed" course="close">10:00-10:25<br/>关闭</div></li>
+			<li><div id="2020020710001025" class="cls-time-myselected" course="close">10:00-10:25<br/>关闭</div></li>
+			<li><div id="2020020810001025" class="cls-time-enabled">10:00-10:25</div></li>
+			<li><div>10:00-10:25</div></li>
+		</ul>
+		<ul>
+			<li><div>10:30-10:55</div></li>
+			<li><div>10:30-10:55</div></li>
+			<li><div>10:30-10:55</div></li>
+			<li><div>10:30-10:55</div></li>
+			<li><div>10:30-10:55</div></li>
+			<li><div>10:30-10:55</div></li>
+			<li><div>10:30-10:55</div></li>
+		</ul>
+		</div>
+	</div>
+	<div id="bottomBox">
+		<div id="buttonGroup">
+		<button class="cls-normal-button" id="btnOk">确定</button>
+		<button class="cls-normal-button" id="btnCancel" onclick="location.reload();">取消</button>
+		</div>
+	</div>
+	<div id="tuliBox">
+		<ul>
+		<li><div class="cls-tuli" style="border: 1px solid #ffc600; background-color:#fff;"></div><span>空闲可被预定的课时</span></li>
+		<li><div class="cls-tuli" style="background-color:rgb(219, 0, 17);"></div><span>我当前选择的课时</span></li>
+		<li><div class="cls-tuli" style="background-color:rgb(0, 150, 17);"></div><span>我预定成功的课时</span></li>
+		<li><div class="cls-tuli" style="background-color:#0050ff;"></div><span>已被其他人预定的课时</span></li>
+		<li><div class="cls-tuli" style="background-color:#a2a2a2;"></div><span>老师未开放的时间</span></li>
+		</ul>
+	</div>
+</div>
+</body>
+<script type="text/javascript" src="../common/jslib/jquery-3.4.1.js"></script>
+<script type="text/javascript" src="../common/utils.js"></script>
+<script type="text/javascript" src="../common/constant.js"></script>
+<script type="text/javascript" src="hi.js"></script>
+</html>

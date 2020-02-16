@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>学霸</title>
+<link rel="stylesheet" type="text/css" href="../common/zikao.css"/>
+<style type="text/css">
+button.cls-normal-button {
+	width: 140px;
+	margin: 0px 17px;
+}
+</style>
+</head>
+<body>
+<div id="mainBox">
+	<div id="pageTitle"><h2 class="cls-title">系统登入</h2></div>
+	<div id="formBox">
+		<div class="cls-form-row">
+			<div class="cls-form-key"><strong>用户名：</strong></div>
+			<div class="cls-form-value"><input type="text" id="txtUserName"/></div>
+		</div>
+		<div class="cls-form-row">
+			<div class="cls-form-key"><strong>密&nbsp;&nbsp;&nbsp;码：</strong></div>
+			<div class="cls-form-value"><input type="password" id="txtPwd"/><br/></div>
+		</div>
+		<div class="cls-form-row">
+			<button class="cls-normal-button" id="btnOk">登入</button>
+			<button class="cls-normal-button" id="btnCancel">取消</button>
+		</div>
+		<div class="cls-form-row">
+			<div class="cls-warm-msg" id="loginWarm" style="color:#f00; display:none;">用户名或密码不正确，请重新输入！</div>
+		</div>
+	</div>
+</div>
+</body>
+<script type="text/javascript" src="../common/jslib/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+(function(w){
+	
+	document.getElementById("btnOk").addEventListener("click", submit);
+	document.getElementById("btnCancel").addEventListener("click", cancel);
+	
+	function cancel(){
+		w.location.href="hi.html";
+	}
+	
+	function submit(){
+		let loginInfo = {
+				stuNo:document.getElementById("txtUserName").value,
+				pwd:document.getElementById("txtPwd").value
+		};
+		
+		$.ajax({
+			url: "/zikao/login",
+			data: JSON.stringify(loginInfo),
+			type: "POST",
+			dataType: "json",
+			contentType: "application/json",
+			success: function(data){
+				console.log("receive response.");
+				console.log(data);
+				//alert(JSON.stringify(data));
+				if(data.header.status==200){
+					w.location.href="hi.html";
+				}else if(data.header.status==202){
+					alert(data.header.message);
+					w.location.href="changepwd.html";
+				}else{
+					let loginWarm = document.getElementById("loginWarm");
+					loginWarm.style.display="inline";
+				}
+			},
+			error: function(e){
+				console.log(e);
+			}
+		});
+	}
+	
+})(window);
+</script>
+</html>

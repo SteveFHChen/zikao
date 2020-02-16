@@ -1,0 +1,59 @@
+
+
+课时预约系统
+Backlog:
+	功能——记录用户操作
+	功能——
+	Enable HTTPS
+	
+	sysAdmin
+	功能——注册用户
+	功能——重置密码
+
+
+2020-02-09
+系统正式上线试运行；
+
+2020-02-10
+关闭日期自动滚动，改为手动按周更新；
+
+2020-02-15
+Front end change - Add name in the class status according to login user's role and privilege;
+DB security - Backup data in DB and verify restore in my local environment;
+	Method 1:
+	Select ... Into Outfile 'filename' [Options]
+	Load Data Infile 'filename' Into Table tablename [Options] [Ignore number Lines]
+	Method 2:
+	mysqldump -T path -uroot -p dbname [tables] [Options]
+	mysqlimport -uroot -p dbname filename.txt [Options]
+	mysql -uroot -p dbname < filename.txt
+	Method 3:
+	mysql -uroot -p --txt/xml/html --execute="Select..." dbname > filename.txt/xml/html
+	
+	Application:
+	Export DLL for a/some tables, or for a database, or for full database; --> For backup and restore, or recreate;
+	Export Data as sql script; --> For backup and restore;
+	Export Data as txt/csv/xml/html format; --> For backup and data checking;
+	
+	e.g.
+	SELECT * FROM zk_course INTO OUTFILE 'E:/fhlab1/ws1/db_backup/course.xml';
+	
+	SELECT * FROM zk_course INTO OUTFILE 'E:/fhlab1/ws1/db_backup/course.csv'
+	FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+	LINES TERMINATED BY '\r\n';
+	
+	CREATE TABLE zk_course_15 AS SELECT * FROM zk_course WHERE 1=2;
+	SELECT * FROM zk_course_15;
+	LOAD DATA INFILE 'E:/fhlab1/ws1/db_backup/course.txt' INTO TABLE zk_course_15;
+
+	mysqldump -uroot -p -d myweb1 zk_course > E:/fhlab1/ws1/db_backup/dp_course_ddl.txt
+	mysqldump -uroot -p myweb1 zk_course > E:/fhlab1/ws1/db_backup/dp_course.txt
+	mysqldump -u root -p --all-databases > E:/fhlab1/ws1/db_backup/dp_all_dbs.txt
+	
+	mysql -uroot -p --html --execute="select * from zk_course;" myweb1 > E:/fhlab1/ws1/db_backup/course.html
+	mysql -uroot -p --xml --execute="select * from zk_course;" myweb1 > E:/fhlab1/ws1/db_backup/course.xml
+
+
+
+
+
