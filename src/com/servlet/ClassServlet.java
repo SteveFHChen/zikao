@@ -22,7 +22,7 @@ import com.util.Utils;
 /**
  * Servlet implementation class ClassServlet
  */
-@WebServlet("/class")
+@WebServlet("/service/class")
 public class ClassServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	

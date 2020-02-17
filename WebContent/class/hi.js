@@ -8,7 +8,7 @@ function logout(){
 	let loginInfo = {p1:"logout"};
 	
 	$.ajax({
-		url: "/zikao/login",
+		url: "/zikao/service/login",
 		data: loginInfo,
 		type: "POST",
 		dataType: "json",
@@ -43,7 +43,7 @@ function logout(){
 		requestData.oper = "queryCurrentUserInfo";
 		
 		$.ajax({
-			url: "/zikao/manageuser",
+			url: "/zikao/service/manageuser",
 			data: JSON.stringify(requestData),
 			type: "POST",
 			dataType: "json",
@@ -87,7 +87,7 @@ function logout(){
 		requestData.oper = "queryCourseList";
 		
 		$.ajax({
-			url: "/zikao/class",
+			url: "/zikao/service/class",
 			data: JSON.stringify(requestData),
 			type: "POST",
 			dataType: "json",
@@ -118,9 +118,11 @@ function logout(){
 	function queryClassStatus(){
 		let requestData = {};
 		requestData.oper = "queryClassStatus";
+		requestData.startTimeStr = "2020021400000000";
+		requestData.endTimeStr = "2020021700000000";
 		
 		$.ajax({
-			url: "/zikao/class",
+			url: "/zikao/service/class",
 			data: JSON.stringify(requestData),
 			type: "POST",
 			dataType: "json",
@@ -281,7 +283,7 @@ function logout(){
 		console.log(JSON.stringify(requestData));
 		
 		$.ajax({
-			url: "/zikao/class",
+			url: "/zikao/service/class",
 			data: JSON.stringify(requestData),
 			type: "POST",
 			dataType: "json",
@@ -321,8 +323,8 @@ function generateTimeDetails(startDate, endDate){
 	//let ed = new Date(endDate);
 	
 	//Testing parameters
-	let sd = new Date('2020-02-10');
-	let ed = new Date('2020-02-16');
+	let sd = new Date('2020-02-15');
+	let ed = new Date('2020-02-21');
 	
 	let days = (ed-sd)/(24*60*60*1000)+1;
 	

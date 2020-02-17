@@ -18,7 +18,7 @@ public class HasSessionQueryClassStatusDao extends AbstractQueryDao {
 			"FROM zk_book_class b\r\n" + 
 			"LEFT JOIN zk_student s ON b.stu_id=s.stu_id\r\n" + 
 			"JOIN zk_course c ON b.course_code=c.course_code\r\n" + 
-			"WHERE b.is_canceled='N'";
+			"WHERE b.is_canceled='N' AND class_time >= '2020021400000000'";
 	
 	public List<SelectedCourse> dao(StudentDto loginUser){
 		List<SelectedCourse> selectedCourses = queryList(this.sql, loginUser, SelectedCourse.class);

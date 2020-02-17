@@ -19,8 +19,8 @@ public abstract class AbstractQueryDao extends CommonDao implements IDao {
 		List<T> result = null;
 				
 		try {
-			System.out.println("AbstractQueryDao DB url:"+url);
-			System.out.println("AbstractQueryDao DB user name:"+userName);
+//			System.out.println("AbstractQueryDao DB url:"+url);
+//			System.out.println("AbstractQueryDao DB user name:"+userName);
 			conn = DriverManager.getConnection(url, userName, password);
 			prepStat = conn.prepareStatement(sql);
 			

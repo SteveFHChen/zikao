@@ -14,7 +14,7 @@ public class NoSessionQueryClassStatusDao extends AbstractQueryDao {
 	public String sql = "SELECT book_id, NULL stu_id, b.course_code, b.class_time, c.course_name \r\n" + 
 			"FROM zk_book_class b\r\n" + 
 			"JOIN zk_course c ON b.course_code=c.course_code\r\n" + 
-			"WHERE b.is_canceled='N'";
+			"WHERE b.is_canceled='N' AND class_time >= '2020021400000000'";
 	
 	public List<SelectedCourse> dao(){
 		List<SelectedCourse> selectedCourses = queryList(this.sql, null, SelectedCourse.class);

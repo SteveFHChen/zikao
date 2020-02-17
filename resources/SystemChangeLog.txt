@@ -53,7 +53,20 @@ DB security - Backup data in DB and verify restore in my local environment;
 	mysql -uroot -p --html --execute="select * from zk_course;" myweb1 > E:/fhlab1/ws1/db_backup/course.html
 	mysql -uroot -p --xml --execute="select * from zk_course;" myweb1 > E:/fhlab1/ws1/db_backup/course.xml
 
-
-
-
+2020-02-16
+Development control - Use git to control source code and database module version
+	git init
+	git add .
+	git commint -m "initialize"
+	touch .gitignore
+	
+System foundation - user operation monitor
+	add filter SystemMonitorFilter, and change url pattern: /service/xxx
+	sys_log
+	zk_sys_log
+	
+2020-02-17
+Front UI pass start_date and end_date to query book_class_status
+Switch to next week class time
+	
 

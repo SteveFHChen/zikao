@@ -16,7 +16,7 @@ import com.util.Utils;
 /**
  * Servlet implementation class UserManageServlet
  */
-@WebServlet("/manageuser")
+@WebServlet("/service/manageuser")
 public class UserManageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

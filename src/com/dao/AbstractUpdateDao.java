@@ -25,8 +25,8 @@ public abstract class AbstractUpdateDao extends CommonDao implements IDao {
 		int result = -1;
 				
 		try {
-			System.out.println("AbstractUpdateDao DB url:"+url);
-			System.out.println("AbstractUpdateDao DB user name:"+userName);
+//			System.out.println("AbstractUpdateDao DB url:"+url);
+//			System.out.println("AbstractUpdateDao DB user name:"+userName);
 			conn = DriverManager.getConnection(url, userName, password);
 			conn.setAutoCommit(true);
 			prepStat = conn.prepareStatement(sql);

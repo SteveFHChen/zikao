@@ -13,17 +13,20 @@ import javax.servlet.http.HttpSession;
 import com.dto.HttpResponse;
 import com.dto.StudentDto;
 import com.service.LoginService;
+import com.sys.dto.ZkSysLogDto;
+import com.sys.service.ZkSysLogService;
 import com.util.Constant;
 import com.util.Utils;
 
 /**
  * Servlet implementation class LoginServlet
  */
-@WebServlet("/login")
+@WebServlet("/service/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private LoginService loginService = new LoginService();
+	private ZkSysLogService zkSysLogService = new ZkSysLogService();
        
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -34,6 +37,8 @@ public class LoginServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		HttpResponse resp = new HttpResponse();
 		String name; 
+		ZkSysLogDto zkSysLogDto = new ZkSysLogDto();
+		StringBuffer logDetail = new StringBuffer();
 		
 		req.setCharacterEncoding("utf-8");
 		Enumeration<String> names = req.getParameterNames();
@@ -44,13 +49,22 @@ public class LoginServlet extends HttpServlet {
 		
 		String p1 = req.getParameter("p1");
 		if("logout".equals(p1)) {
+			StudentDto loginUser = (StudentDto) req.getSession().getAttribute("LOGINUSER");
+			
 			req.getSession().removeAttribute(Constant.SESSION_KEY_LOGINUSER);
 			resp.getHeader().setStatus(200);
 			resp.getHeader().setMessage("注销成功.");
+			
+			zkSysLogDto.setOperCode("User Logout");
+			zkSysLogDto.setUserId(loginUser.getStuId());
+			if(loginUser!=null)
+				logDetail.append("User "+loginUser.getStuNo()+" "+loginUser.getName()+" logout.");
 		}else {//login
 			StudentDto dto = Utils.getPayloadAsJava(req, StudentDto.class);
 			
 			System.out.println(dto);
+			zkSysLogDto.setOperCode("User Login");
+			logDetail.append("Params: "+dto.getStuNo()+" "+dto.getPwd());
 			
 			StudentDto loginUser = loginService.login(dto);
 			
@@ -73,11 +87,18 @@ public class LoginServlet extends HttpServlet {
 					resp.getHeader().setMessage("登入成功.");
 				}
 				
+				logDetail.append(" success.");
+				zkSysLogDto.setUserId(loginUser.getStuId());
 			}else {
 				resp.getHeader().setStatus(201);
 				resp.getHeader().setMessage("登入失败！");
+				
+				logDetail.append(" failed.");
 			}
 		}
+		
+		zkSysLogDto.setDetail(logDetail.toString());
+		this.zkSysLogService.sysLogInput(zkSysLogDto);
 		
 		res.setCharacterEncoding("utf-8");
 		res.getWriter().println(Utils.Java2Json(resp));
