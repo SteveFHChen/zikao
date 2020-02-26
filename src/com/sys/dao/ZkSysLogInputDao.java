@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import com.dao.AbstractUpdateDao;
-import com.sys.dto.SysLogDto;
 import com.sys.dto.ZkSysLogDto;
 
 public class ZkSysLogInputDao extends AbstractUpdateDao {

@@ -2,9 +2,12 @@ package com.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.dto.SystemParamDto;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -61,5 +64,17 @@ public class Utils {
 	
 	public static <T> T getPayloadAsJava(HttpServletRequest req, Class<T> clazz) {
 		return Json2Java(getRequestPayload(req), clazz);
+	}
+	
+	public static void main(String[] args) {
+		//Test Java map convert to JSON
+		Map m1 = new HashMap();
+		m1.put("StartDateStr", "2020-02-03");
+		m1.put("EndDateStr", "2020-02-23");
+		
+		SystemParamDto dto = new SystemParamDto();
+		dto.setOper("Query");
+		m1.put("Obj1", dto);
+		System.out.println(Utils.Java2Json(m1));
 	}
 }

@@ -15,6 +15,10 @@ public class StudentDto {
 	private String newPwd2;
 	private String oper;
 	
+	//For query class status
+	private String startDateStr;
+	private String endDateStr;
+	
 	public Integer getStuId() {
 		return stuId;
 	}
@@ -74,6 +78,18 @@ public class StudentDto {
 	}
 	public void setOper(String oper) {
 		this.oper = oper;
+	}
+	public String getStartDateStr() {
+		return startDateStr;
+	}
+	public void setStartDateStr(String startDateStr) {
+		this.startDateStr = startDateStr;
+	}
+	public String getEndDateStr() {
+		return endDateStr;
+	}
+	public void setEndDateStr(String endDateStr) {
+		this.endDateStr = endDateStr;
 	}
 	
 }

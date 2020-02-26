@@ -3,6 +3,7 @@ package com.servlet;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -65,6 +66,12 @@ public class ClassServlet extends HttpServlet {
 				resp.getHeader().setMessage("预约课时成功.");
 				resp.setData(scs);
 			}
+		}else if("queryClassDayRange".equals(dto.getOper())) {
+			Map classDayRange = bookClassService.queryClassDayRange();
+			
+			resp.getHeader().setStatus(200);
+			resp.getHeader().setMessage("查询课时成功.");
+			resp.setData(classDayRange);
 		}else if("queryClassStatus".equals(dto.getOper())) {
 			if(null==loginUser) {
 				//No session situation

@@ -28,6 +28,7 @@ public class UserManageServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpResponse resp = new HttpResponse();
+		req.setCharacterEncoding("utf-8");
 		StudentDto loginUser = (StudentDto) req.getSession().getAttribute("LOGINUSER");
 		
 		StudentDto dto = Utils.getPayloadAsJava(req, StudentDto.class);

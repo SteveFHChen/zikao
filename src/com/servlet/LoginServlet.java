@@ -72,7 +72,7 @@ public class LoginServlet extends HttpServlet {
 			if(loginUser!=null && loginUser.getStuId()!=0) {
 				HttpSession session = req.getSession();
 				session.setAttribute(Constant.SESSION_KEY_LOGINUSER, loginUser);
-				session.setMaxInactiveInterval(60*30);
+				session.setMaxInactiveInterval(60*60*24*5);
 				
 				String sessionId = req.getSession().getId();
 				System.out.println("sessionId:"+sessionId);

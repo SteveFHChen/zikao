@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>系统参数管理</title>
+<link rel="stylesheet" type="text/css" href="../common/zikao.css"/>
+<style type="text/css">
+div#mainBox {
+	width: 630px;
+}
+
+.cls-form-row {
+    width: 625px;
+}
+
+button.cls-normal-button {
+	width: 140px;
+	margin: 0px 17px;
+}
+
+img.cls-user-photo {
+    margin: auto;
+    width: 130px;
+    height: 130px;
+    text-align: center;
+    display: block;
+}
+
+#userName {
+    margin: auto;
+    display: block;
+    width: fit-content;
+    font-size: 20px;
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+<div id="mainBox">
+	<div id="pageTitle"><h2 class="cls-title">系统参数管理</h2></div>
+	<div id="formBox">
+		<div class="cls-form-row">
+			<img class="cls-user-photo" src="/zikao/resource/class/default.jpg"/>
+			<span id="userName">Steve Chen</span>
+		</div>
+		<div id="paramBox">
+		<div class="cls-form-row">
+			<div class="cls-form-value">
+				<input type="text" class="paramCode" value="StartDateStr"/>
+				<input type="text" class="paramValue" value="2020-02-24"/>
+				<input type="text" class="paramDesc" value="开始日期"/>
+			</div>
+		</div>
+		<div class="cls-form-row">
+			<div class="cls-form-value">
+				<input type="text" class="paramCode" value="StartDateStr"/>
+				<input type="text" class="paramValue" value="2020-03-02"/>
+				<input type="text" class="paramDesc" value="结束日期"/>
+			</div>
+		</div>
+		</div>
+		<div class="cls-form-row">
+			<div class="cls-form-btn-container">
+			<button class="cls-normal-button" id="btnOk">修改</button>
+			<button class="cls-normal-button" id="btnCancel">返回</button>
+			</div>
+		</div>
+	</div>
+</div>
+	<!-- 原密码：<input type="password" id="txtOldPwd"/><br/>
+	新密码：<input type="password" id="txtNewPwd1"/><br/>
+	确认新密码：<input type="password" id="txtNewPwd2"/><br/>
+	<input type="submit" id="btnOk" value="修改"/>
+	<div id="warm" style="color:#f00; display:none;">密码设置不符合要求，请重新设置！</div> -->
+</body>
+<script type="text/javascript" src="../common/jslib/jquery-3.4.1.js"></script>
+<script type="text/javascript" src="../common/constant.js"></script>
+<script type="text/javascript">
+(function(w){
+	
+	document.getElementById("btnOk").addEventListener("click", submit);
+	document.getElementById("btnCancel").addEventListener("click", cancel);
+	
+	function init(){
+		querySystemParam();
+	}
+	init();
+	
+	function querySystemParam(){
+		let requestData = {};
+		requestData.oper = "querySystemParam";
+		
+		$.ajax({
+			url: "/zikao/service/managesystem",
+			data: JSON.stringify(requestData),
+			type: "POST",
+			dataType: "json",
+			contentType: "application/json",
+			success: function(data){
+				console.log("receive response.");
+				console.log(JSON.stringify(data));
+				//alert(JSON.stringify(data));
+				if(data.header.status==200){
+					let rows = [];
+					for(let i=0; i<data.data.length; i++){
+						let item = data.data[i];
+						rows[i]='<div class="cls-form-row">'
+							+'	<div class="cls-form-value">'
+							+'		<input type="text" class="paramCode" value="'+item.paramCode+'"/>'
+							+'		<input type="text" class="paramValue" value="'+item.paramValue+'"/>'
+							+'		<input type="text" class="paramDesc" value="'+item.paramDesc+'"/>'
+							+'	</div>'
+							+'</div>';
+					}
+					
+					document.getElementById("paramBox").innerHTML=rows.join("");
+				}else{
+					alert(data.header.message);
+				}
+				
+			},
+			error: function(e){
+				console.log(e);
+			}
+		});
+	}
+	
+	
+	function cancel(){
+		w.location.href="hi.html";
+	}
+	
+	function submit(){
+		let requestData = {
+				oper: "updateSystemParam",
+				systemParams: []
+		};
+		
+		let paramCode=document.querySelectorAll(".paramCode");
+		let paramValue=document.querySelectorAll(".paramValue");
+		let paramDesc=document.querySelectorAll(".paramDesc");
+		for(let i=0; i<paramCode.length; i++){
+			/* requestData.systemParam.push(
+					{paramCode[i].value : paramValue[i].value}
+				); */ //This expression is incorrect, why???
+			//because json object key cannot be an express.
+			let paramItem = {
+					paramCode : paramCode[i].value, 
+					paramValue : paramValue[i].value,
+					paramDesc : paramDesc[i].value
+					};
+			requestData.systemParams.push(paramItem);
+		}
+		
+		//alert(JSON.stringify(requestData));
+		//Checking
+		
+		$.ajax({
+			url: "/zikao/service/managesystem",
+			data: JSON.stringify(requestData),
+			type: "POST",
+			dataType: "json",
+			contentType: "application/json",
+			success: function(data){
+				console.log("receive response.");
+				console.log(data);
+				//alert(JSON.stringify(data));
+				if(data.header.status==200){
+					alert(data.header.message);
+				}else{
+					document.getElementById("warmInvalid").style.setProperty("display", "inline");
+				}
+			},
+			error: function(e){
+				console.log(e);
+			}
+		});
+	}
+	
+})(window);
+</script>
+</html>

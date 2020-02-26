@@ -18,7 +18,7 @@ public class HasSessionQueryClassStatusDao extends AbstractQueryDao {
 			"FROM zk_book_class b\r\n" + 
 			"LEFT JOIN zk_student s ON b.stu_id=s.stu_id\r\n" + 
 			"JOIN zk_course c ON b.course_code=c.course_code\r\n" + 
-			"WHERE b.is_canceled='N' AND class_time >= '2020021400000000'";
+			"WHERE b.is_canceled='N' AND class_time >= ?";
 	
 	public List<SelectedCourse> dao(StudentDto loginUser){
 		List<SelectedCourse> selectedCourses = queryList(this.sql, loginUser, SelectedCourse.class);
@@ -32,6 +32,7 @@ public class HasSessionQueryClassStatusDao extends AbstractQueryDao {
 		StudentDto loginUser = new StudentDto();
 		loginUser.setStuId(1);
 		loginUser.setRoleCode("teacher");
+		loginUser.setStartDateStr("2020-02-14");
 		
 		List<SelectedCourse> selectedCourses = dao.dao(loginUser);
 		
@@ -52,6 +53,7 @@ public class HasSessionQueryClassStatusDao extends AbstractQueryDao {
 			prepStat.setString(6, p.getRoleCode());
 			prepStat.setInt(7, p.getStuId());
 			prepStat.setString(8, p.getName());
+			prepStat.setString(9, p.getStartDateStr().replace("-", "")+"00000000");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

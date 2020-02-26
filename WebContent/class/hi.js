@@ -34,9 +34,32 @@ function logout(){
 (function(w){
 	console.log("hello");
 	
-	let sd = new Date(new Date().getTime()-2*24*60*60*1000);
-	let ed = new Date(new Date().getTime()+4*24*60*60*1000);
-	generateTimeDetails(sd.getFormatStr("YYYY-MM-DD"),ed.getFormatStr("YYYY-MM-DD"));
+	function queryClassDayRange(){
+		let requestData = {};
+		requestData.oper = "queryClassDayRange";
+		
+		$.ajax({
+			url: "/zikao/service/class",
+			data: JSON.stringify(requestData),
+			type: "POST",
+			dataType: "json",
+			contentType: "application/json",
+			success: function(data){
+				console.log("receive response.");
+				console.log(data);
+//				alert(JSON.stringify(data));
+				if(data.header.status==200){
+					generateTimeDetails(data.data.StartDateStr, data.data.EndDateStr);
+				}else{
+					alert(data.header.message);
+				}
+				
+			},
+			error: function(e){
+				console.log(e);
+			}
+		});
+	}
 	
 	function queryUserInfo(){
 		let requestData = {};
@@ -66,12 +89,19 @@ function logout(){
 					document.getElementById("logoutLink").style.setProperty("display","inline");
 					document.getElementById("userNameLink").style.setProperty("display","inline");
 					document.getElementById("userPhotoLink").style.setProperty("display","inline");
+					if(data.data.roleCode=="sysAdmin"){
+						document.getElementById("systemparamLink").style.setProperty("display","inline");
+					}else{
+						document.getElementById("systemparamLink").style.setProperty("display","none");
+					}
+					
 				}else{
 //					alert(data.header.message);
 					document.getElementById("loginLink").style.setProperty("display","inline");
 					document.getElementById("logoutLink").style.setProperty("display","none");
 					document.getElementById("userNameLink").style.setProperty("display","none");
 					document.getElementById("userPhotoLink").style.setProperty("display","none");
+					document.getElementById("systemparamLink").style.setProperty("display","none");
 				}
 				
 			},
@@ -80,7 +110,6 @@ function logout(){
 			}
 		});
 	}
-	queryUserInfo();
 	
 	function queryCourseList(){
 		let requestData = {};
@@ -113,7 +142,6 @@ function logout(){
 			}
 		});
 	}
-	queryCourseList();
 	
 	function queryClassStatus(){
 		let requestData = {};
@@ -133,6 +161,7 @@ function logout(){
 //				alert(JSON.stringify(data));
 				if(data.header.status==200){
 					updateClassStatusInUI(data.data);
+					addEvent();
 				}else{
 					alert(data.header.message);
 				}
@@ -169,8 +198,6 @@ function logout(){
 		
 	}
 	
-	queryClassStatus();
-	
 	function selectClass(){
 		console.log("Clicked2."+this+this.innerHTML + this.getAttribute("val1"));
 		
@@ -204,17 +231,6 @@ function logout(){
 		document.getElementById("courseAlert").style.display="none";
 	}
 	
-	let times = document.querySelectorAll("div#timeBox ul > li > div");
-	times.forEach(function(t){
-			
-			if(CLS_TIME_ENABLED==t.getAttribute(CLASS) || CLS_TIME_MYSELECTED==t.getAttribute(CLASS)){
-				t.addEventListener("click", selectClass);
-			}
-			
-		}, this);
-	
-	
-	document.getElementById("btnOk").addEventListener("click", submit);
 	function submit(){
 		var requestData = {};
 		//requestData.userId = 1;//For debuging
@@ -312,6 +328,39 @@ function logout(){
 		return hh_start+":"+min_start+"-"+hh_end+":"+min_end;
 	}
 	
+	function addEvent(){
+		let times = document.querySelectorAll("div#timeBox ul > li > div");
+		times.forEach(function(t){
+				
+				if(CLS_TIME_ENABLED==t.getAttribute(CLASS) || CLS_TIME_MYSELECTED==t.getAttribute(CLASS)){
+					t.addEventListener("click", selectClass);
+				}
+				
+			}, this);
+	}
+	
+	/*
+	let sd = new Date(new Date().getTime()-2*24*60*60*1000);
+	let ed = new Date(new Date().getTime()+4*24*60*60*1000);
+	generateTimeDetails(sd.getFormatStr("YYYY-MM-DD"),ed.getFormatStr("YYYY-MM-DD"));
+	*/
+	queryClassDayRange();
+	queryUserInfo();
+	queryCourseList();
+	queryClassStatus();
+	
+	/*let times = document.querySelectorAll("div#timeBox ul > li > div");
+	times.forEach(function(t){
+			
+			if(CLS_TIME_ENABLED==t.getAttribute(CLASS) || CLS_TIME_MYSELECTED==t.getAttribute(CLASS)){
+				t.addEventListener("click", selectClass);
+			}
+			
+		}, this);*/
+	//How to use promise to make the code better?
+	
+	document.getElementById("btnOk").addEventListener("click", submit);
+	
 })(window)
 
 function generateTimeDetails(startDate, endDate){
@@ -319,12 +368,12 @@ function generateTimeDetails(startDate, endDate){
 		startDate endDate format: string yyyy-mm-dd e.g. 2020-01-03
 		The duration days should be 7, otherwise UI display unnormal.
 	*/
-	//let sd = new Date(startDate);
-	//let ed = new Date(endDate);
+	let sd = new Date(startDate);
+	let ed = new Date(endDate);
 	
 	//Testing parameters
-	let sd = new Date('2020-02-15');
-	let ed = new Date('2020-02-21');
+	//let sd = new Date('2020-02-20');
+	//let ed = new Date('2020-02-26');
 	
 	let days = (ed-sd)/(24*60*60*1000)+1;
 	

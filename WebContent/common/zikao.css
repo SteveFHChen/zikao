@@ -111,6 +111,10 @@ button.cls-normal-button {
     font-size: 30px;
 }
 
+.cls-form-btn-container {
+	text-align: center;
+}
+
 .cls-form-star{
 	color: #f00;
 	font-size: 30px;

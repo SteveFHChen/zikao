@@ -69,4 +69,9 @@ System foundation - user operation monitor
 Front UI pass start_date and end_date to query book_class_status
 Switch to next week class time
 	
-
+2020-02-21
+To better trace user's behavior, change session max idle time from 30min to 5days;
+To fix page cache issue after updated html or js for opening class, change hi.js to hiyyyymmdd.js;
+	Root cause: browser cache is based on file name. 
+	So if file name is changed, the cache will ineffective.
+	

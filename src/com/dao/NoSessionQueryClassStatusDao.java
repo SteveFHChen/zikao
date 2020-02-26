@@ -4,20 +4,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.dto.SelectedCourse;
-import com.dto.StudentDto;
 
 public class NoSessionQueryClassStatusDao extends AbstractQueryDao {
 
 	public String sql = "SELECT book_id, NULL stu_id, b.course_code, b.class_time, c.course_name \r\n" + 
 			"FROM zk_book_class b\r\n" + 
 			"JOIN zk_course c ON b.course_code=c.course_code\r\n" + 
-			"WHERE b.is_canceled='N' AND class_time >= '2020021400000000'";
+			"WHERE b.is_canceled='N' AND class_time >= ?";
 	
-	public List<SelectedCourse> dao(){
-		List<SelectedCourse> selectedCourses = queryList(this.sql, null, SelectedCourse.class);
+	public List<SelectedCourse> dao(Map classDayRange){
+		List<SelectedCourse> selectedCourses = queryList(this.sql, classDayRange, SelectedCourse.class);
 		return selectedCourses;
 	}
 	
@@ -25,7 +26,9 @@ public class NoSessionQueryClassStatusDao extends AbstractQueryDao {
 		// TODO Auto-generated method stub
 		NoSessionQueryClassStatusDao dao = new NoSessionQueryClassStatusDao();
 		
-		List<SelectedCourse> selectedCourses = dao.dao();;
+		Map dayRange = new HashMap();
+		dayRange.put("StartDateStr", "2020-02-14");
+		List<SelectedCourse> selectedCourses = dao.dao(dayRange);
 		
 		System.out.println("Query DB and map to Java success.");
 	}
@@ -33,6 +36,16 @@ public class NoSessionQueryClassStatusDao extends AbstractQueryDao {
 	@Override
 	public PreparedStatement sqlParamsSetting(PreparedStatement prepStat, Object params) {
 		// TODO Auto-generated method stub
+		Map p = (Map) params;
+		
+		String sd = (String) p.get("StartDateStr");
+		try {
+			prepStat.setString(1, sd.replaceAll("-", "")+"00000000");
+			//Test data: '2020021400000000'
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return prepStat;
 	}
 
