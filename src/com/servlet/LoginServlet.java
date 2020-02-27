@@ -90,6 +90,7 @@ public class LoginServlet extends HttpServlet {
 				logDetail.append(" success.");
 				zkSysLogDto.setUserId(loginUser.getStuId());
 			}else {
+				zkSysLogDto.setUserId(-1);
 				resp.getHeader().setStatus(201);
 				resp.getHeader().setMessage("登入失败！");
 				

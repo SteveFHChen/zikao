@@ -98,6 +98,7 @@ button.cls-normal-button {
     margin: auto;
     width: 370px;
     padding: 5px;
+    text-align:center;
 }
 
 .cls-form-key {
