@@ -1,9 +1,26 @@
+	mvn archetype:generate -DgroupId=fh.com -DartifactId=fhec -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeCatalog=internal -DinteractiveMode=false
+
 Maven命令创建Web项目：
 	mvn archetype:generate -DgroupId=com.fh -DartifactId=prj-zikao -DarchetypeArtifactId=maven-archetype-webapp
 
 导出Maven项目依赖的Jar：
 	mvn dependency:copy-dependencies -DoutputDirectory=lib
 	maven项目所依赖的jar包都会复制到项目目录下的lib目录下
+	
+Maven web project and pack war:
+	mvn clean install
+	[ERROR] Failed to execute goal org.apache.maven.plugins:maven-war-plugin:2.2:war (default-war) on project webcat-war: Error assembling WAR: webxml attribute is required (or pre-existing WEB-INF/web.xml if executing in update mode) -> [Help 1]
+	Solution:
+		Add <plugin> maven-war-plugin config into war project pom.xml file.
+		
+Maven web project deployed to Tomcat, and Tomcat cannot load jars in lib folder.
+	Solution: add maven library into deploy path in project deployment assembly setting.
+		
+2020-06-21
+	project: webcat
+		add change webcat project packing from default jar to war.
+		add pom project to auto build all webcat projects (one key build all)
+		
 
 Web项目，前后端参数传输问题
 
