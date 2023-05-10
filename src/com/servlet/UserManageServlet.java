@@ -19,6 +19,8 @@ import com.util.Utils;
 @WebServlet("/service/manageuser")
 public class UserManageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private UserManageService userManageService = new UserManageService();
        
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -33,7 +35,8 @@ public class UserManageServlet extends HttpServlet {
 		
 		StudentDto dto = Utils.getPayloadAsJava(req, StudentDto.class);
 		
-		UserManageService userManageService = new UserManageService();
+		System.out.println(dto);
+		
 		StudentDto result = null;
 		
 		if("changePwd".equals(dto.getOper())) {

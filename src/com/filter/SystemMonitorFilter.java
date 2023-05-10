@@ -40,7 +40,7 @@ public class SystemMonitorFilter implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-//		System.out.println(this.getClass().getName()+" doFilter() executing...");
+		System.out.println(this.getClass().getName()+" doFilter() executing...");
 		
 		HttpServletRequest httpReq = (HttpServletRequest) req;
 		

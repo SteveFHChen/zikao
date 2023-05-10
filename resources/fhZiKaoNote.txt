@@ -49,4 +49,42 @@ Web项目，前后端参数传输问题
 SpringMVC开放静态资源
 	<mvc:resources location="/common/" mapping="/common/**"/>
 	
+2023-03-25
+<form/>中<input/>的name与id的区别：
+使用<form/>提交表单时，自动使用的是<input/>的name作为参数的名称，而不是<input/>的ID。
+如果有元素只是起前端显示作用或临时存储作用，那可以通过不赋予name来避开表单提交时把它提交。
+
+Tomcat temp path:
+D:\fh\ws\ws1\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\zikao
+
+2023-03-26 Listener, Filter, Servlet
+在哪个位置如何配置来加载程序的properties配制文件（包含path, DB connection配制）？
+答：使用listener，实现ServletContextListener接口，在contextInitialized()中写代码加载properties文件，并提供一个static方法给要用的地方调用取值。
+
+	com.listener.SystemListener SystemListener() executing...
+	com.listener.SystemListener contextInitialized() executing...
+	Reload config success.
+	Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
+	com.dao.CommonDao static executed.
 	
+	从上面的log可以看出，WebServer启动时Listener先会创建并执行contextInitialized()，此时在里面加载application.properties等配置是最合适的时机。
+	然后去到了CommonDao父类，先会执行static{}块，要用到class driver类的名称，刚好前面已经从properties文件中加载到了。后续要用DB connection/username/pwd也都可以取到了。
+
+一、执行顺序
+1. 启动的顺序：Listener->Filter->Servlet
+2. 简单记为：理(Listener)发(Filter)师(Servlet)
+3. 执行的顺序不会因为三个标签在配置文件中的先后顺序而改变。
+4. 同类别的定义顺序影响优先级，越靠前，优先级越高。
+5. 如果web.xml中配置了<context-param>，初始化顺序：context-param > Listener > Filter > Servlet
+二、生命周期
+1.Listener生命周期：一直从程序启动到程序停止运行。
+2.ServletRequestListener：每次访问一个Request资源前，都会执行requestInitialized()方法，方法访问完毕，都会执行requestDestroyed()方法。
+HttpSessionListener：每次调用request.getSession()，都会执行sessionCreated()方法，执行session.invalidate()方法，都会执行sessionDestroyed()方法。
+ServletRequestAttributeListener：每次调用request.setAttribute()都会执行attributeAdded()方法，如果set的key在request里面存在，就会执行attributeReplacerd()方法，调用request.removeAttribute()方法，都会执行attributeRemoved()方法。
+3.Filter生命周期：程序启动调用Filter的init()方法(一旦触发，但是永远只调用一次)，程序停止调用Filter的destroy()方法(永远只调用一次，服务器移除或者彻底关闭，并且在Servlet destory() 之后)，doFilter()方法每次的访问请求如果符合拦截条件都会调用(程序第一次进入一个新的Servlet，会运行在Servlet调用init()方法后执行)，但是不管第几次，都在调用doGet()，doPost()方法之前。
+4.Servlet生命周期：程序第一次访问（而不是启动Tomcat时调用init()），会调用servlet的init()方法初始化（只执行一次），每次程序执行都会根据请求调用doGet()或者doPost()方法，程序停止调用destory()方法（服务器移除或者彻底关闭）。
+
+
+
+
+

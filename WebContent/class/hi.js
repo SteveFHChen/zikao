@@ -90,8 +90,10 @@ function logout(){
 					document.getElementById("userNameLink").style.setProperty("display","inline");
 					document.getElementById("userPhotoLink").style.setProperty("display","inline");
 					if(data.data.roleCode=="sysAdmin"){
+						document.getElementById("registerUserLink").style.setProperty("display","inline");
 						document.getElementById("systemparamLink").style.setProperty("display","inline");
 					}else{
+						document.getElementById("registerUserLink").style.setProperty("display","none");
 						document.getElementById("systemparamLink").style.setProperty("display","none");
 					}
 					
@@ -189,7 +191,7 @@ function logout(){
 							( new Date(classStatus.classId.substr(0,4)+"-"+classStatus.classId.substr(4,2)+"-"+classStatus.classId.substr(6,2)+" "+classStatus.classId.substr(8,2)+":"+classStatus.classId.substr(10,2)) <= currDate 
 									? CLS_TIME_MYPASSEDSELECTED : CLS_TIME_MYSELECTED) 
 							: 
-							(classStatus.courseCode=="close" ? CLS_TIME_TEACHERCLOSED : CLS_TIME_OTHEROCCUPIED));
+							(classStatus.courseCode=="closed" ? CLS_TIME_TEACHERCLOSED : CLS_TIME_OTHEROCCUPIED));
 				classx.setAttribute("course", classStatus.courseCode);
 				classx.innerHTML+="<br/>"+classStatus.courseName
 								+"<br/>"+(classStatus.stuName==null?"":classStatus.stuName);
@@ -380,7 +382,7 @@ function generateTimeDetails(startDate, endDate){
 	let timeSlot = [
 		"10:00-10:25",
 		"10:30-10:55",
-		"11:00-10:25",
+		"11:00-11:25",
 		"11:30-11:55",
 		/*"12:00-12:25",
 		"12:30-12:55",

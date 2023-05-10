@@ -14,6 +14,7 @@ import com.dto.HttpResponse;
 import com.dto.StudentDto;
 import com.dto.SystemParamDto;
 import com.dto.SystemParamItemDto;
+import com.listener.SystemListener;
 import com.mysql.cj.Constants;
 import com.service.SystemManageService;
 import com.util.Constant;
@@ -25,10 +26,29 @@ import com.util.Utils;
 @WebServlet("/service/managesystem")
 public class SystemManageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private SystemManageService systemManageService = new SystemManageService();
        
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		res.getWriter().append("Served at: ").append(req.getContextPath());
+		
+		HttpResponse resp = new HttpResponse();
+		req.setCharacterEncoding("utf-8");
+		res.setCharacterEncoding("utf-8");
+		
+		System.out.println(req.getParameter("p1") + " = " + SystemListener.get(req.getParameter("p1")));
+		
+		//Reload application.properties without application restart.
+		String oper=req.getParameter("oper");
+		
+		if("reloadConfig".equals(oper)) {
+			SystemListener.loadProperties();
+			resp.getHeader().setStatus(200);
+			resp.getHeader().setMessage("Reload config success.");
+		}
+		
+		res.getWriter().println(Utils.Java2Json(resp));
 	}
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -54,8 +74,6 @@ public class SystemManageServlet extends HttpServlet {
 		
 		SystemParamDto dto = Utils.getPayloadAsJava(req, SystemParamDto.class);
 		
-		SystemManageService systemManageService = new SystemManageService();
-		
 		if("querySystemParam".equals(dto.getOper())) {
 			dto.setLoginUser(loginUser);
 			List<SystemParamItemDto> systemParam = systemManageService.querySystemParmas(dto);
@@ -69,6 +87,10 @@ public class SystemManageServlet extends HttpServlet {
 			
 			resp.getHeader().setStatus(200);
 			resp.getHeader().setMessage("修改成功.");
+		}else if("reloadConfig".equals(dto.getOper())) {
+			SystemListener.loadProperties();
+			resp.getHeader().setStatus(200);
+			resp.getHeader().setMessage("Reload config success.");
 		}
 		
 		res.getWriter().println(Utils.Java2Json(resp));

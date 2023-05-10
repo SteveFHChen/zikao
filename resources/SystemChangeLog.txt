@@ -74,4 +74,53 @@ To better trace user's behavior, change session max idle time from 30min to 5day
 To fix page cache issue after updated html or js for opening class, change hi.js to hiyyyymmdd.js;
 	Root cause: browser cache is based on file name. 
 	So if file name is changed, the cache will ineffective.
+
+2023-03-25
+Practise:
+Issue: If updated the hi.js, the user cannot see the new version due to browser cache, even if the user refresh.
+Solution: User can clean the cache. We can update the js file name and the reference in hi.html.
+
+Done:
+Create separate DB myweb1 for zikao.
+Create separate schema user zikaouser for zikao instead of root.
+Deploy to Prod;
+
+Development environment:
+apache-tomcat-9.0.21
+jdk180201_64
+git
+Java compiler -> Compiler compliance level:1.8
+
+New feature pending to development:
+1. Register user
+#upload photo into server (难点)
+	关键要搞明白：前端上传数据的格式，后台Servlet接收到数据的格式以及解析方法
+	不是简单的key-value的form，而是enctype="multipart/form-data"的格式。
 	
+	Preview the photo selected by user to upload: 
+	use <input type="file"> onchange event.
+	var photo=document.getElementById("photo")
+	var imgObj=URL.createObjectURL(photo.files[0])
+	var img=document.getElementById("imgPhoto")
+	imp.src = imgObj;
+	
+	servlet实现图片的上传 https://blog.csdn.net/qq_43392001/article/details/93318200
+	Need to use commons-fileupload-1.5, and it depends on commons-io-2.6 IOUtils class.
+	https://commons.apache.org/proper/commons-fileupload/
+	https://archive.apache.org/dist/commons/io/binaries/
+	先下载了commons-io 2.11不行，运行报错说找不到IOUtils。
+	
+#insert user record into zk_student
+2. Automation testing
+3. Migrate DB to PostgreSQL
+4. Move DB config into properties config file (2023-03-26 Done)
+5. Move properties config file out of web project package to keep DB connect info safe
+	Cannot pack it into war and upload to nexus.
+5. Small class vs 1:1
+6. Use DB connection pool instead of new connection everytime.
+
+Tunning:
+Move new service in servlet from function body to class property level. (All servlet, service and dao should be stateless).
+
+
+

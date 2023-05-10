@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>注册用户</title>
+</head>
+<style type="text/css">
+img.cphoto {
+	max-width: 100px;
+}
+</style>
+<body>
+	<h2>注册用户</h2>
+	<form action="/zikao/service/registeruser" enctype="multipart/form-data" method="post">
+		用户名：<input type="text" id="userId" name="userId"/><br/>
+		密码：<input type="password" id="pwd" name="pwd"/><br/>
+		确认密码：<input type="password" id="confirmPwd" name="confirmPwd"/><br/>
+		昵称：<input type="text" id="username" name="username"/><br/>
+		角色：<input type="text" id="role" name="role"/><br/>
+		头像文件名：<input type="text" id="photoFileName" name="photoFileName"/> 以后有空再Enhance为自动生成文件名<br/>
+		头像：<input type="file" id="photo" name="photo" accept=".jpg, .jpeg, .png, .bmp" onchange="f1();"/><br/>
+		<image id="imgPhoto" name="imgPhoto" class="cphoto" src=""></image><br/>
+		
+		<input type="submit" value="注册3"></input>
+		<button class="cls-normal-button" id="btnOk">注册</button>
+		<button class="cls-normal-button" id="btnCancel">取消</button>
+	</form>
+	
+	
+	 
+	
+</body>
+<script type="text/javascript">
+function f1(){
+	console.log("hello");
+	let photoInput=document.getElementById("photo");
+	let imgObject=URL.createObjectURL(photoInput.files[0]);
+	document.getElementById("imgPhoto").src=imgObject;
+}
+</script>
+</html>

@@ -27,6 +27,8 @@ import com.util.Utils;
 public class ClassServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	private BookClassService bookClassService = new BookClassService();
+	
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		System.out.println("Received get request.");
 		res.getWriter().append("Served at: ").append(req.getContextPath());
@@ -51,7 +53,6 @@ public class ClassServlet extends HttpServlet {
 //		String payload = Utils.getRequestPayload(req);
 		BookClassDto dto = Utils.getPayloadAsJava(req, BookClassDto.class);
 		
-		BookClassService bookClassService = new BookClassService();
 		List<SelectedCourse> scs = null;
 		
 		if("bookClass".equals(dto.getOper())) {
@@ -110,7 +111,5 @@ public class ClassServlet extends HttpServlet {
 //		res.getWriter().println("{\"msg\":\"预约成功！\"}");
 		res.getWriter().println(Utils.Java2Json(resp));
 	}
-	
-	
 	
 }
